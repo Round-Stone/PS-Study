@@ -6,8 +6,7 @@
  */
 const solution = (numbers, hand) => {
   let result;
-  let lPos = "*";
-  let rPos = "#";
+  let [lPos, rPos] = [ASTERISK, SHARP];
 
   result = numbers.reduce((acc, curr) => {
     let pos = checkHandPosition(curr, { lPos, rPos }, hand);
@@ -31,35 +30,30 @@ const solution = (numbers, hand) => {
  * 거리가 다르다면 작은 거리 기준으로 결정된다.
  */
 const checkHandPosition = (key, { lPos, rPos }, mainHand) => {
-  if ([1, 4, 7].includes(key)) {
-    return "L";
-  } else if ([3, 6, 9].includes(key)) {
-    return "R";
+  if ([1, 4, 7].includes(key)) return "L";
+  if ([3, 6, 9].includes(key)) return "R";
+
+  const [lx, ly] = getCurrentPosition(lPos);
+  const [rx, ry] = getCurrentPosition(rPos);
+  const [tx, ty] = getCurrentPosition(key);
+
+  const leftHandDistance = Math.abs(tx - lx) + Math.abs(ty - ly);
+  const rightHandDistance = Math.abs(tx - rx) + Math.abs(ty - ry);
+
+  let pos;
+  if (leftHandDistance === rightHandDistance) {
+    pos = mainHand[0].toUpperCase();
   } else {
-    const [lx, ly] = getCurrentPosition(lPos);
-    const [rx, ry] = getCurrentPosition(rPos);
-    const [tx, ty] = getCurrentPosition(key);
-
-    const leftHandDistance = Math.abs(tx - lx) + Math.abs(ty - ly);
-    const rightHandDistance = Math.abs(tx - rx) + Math.abs(ty - ry);
-
-    let pos;
-    if (leftHandDistance === rightHandDistance) {
-      pos = mainHand[0].toUpperCase();
-    } else {
-      pos = leftHandDistance < rightHandDistance ? "L" : "R";
-    }
-
-    return pos;
+    pos = leftHandDistance < rightHandDistance ? "L" : "R";
   }
+
+  return pos;
 };
 
 /**
  * key에 대한 현재 position을 반환한다.
  */
-const getCurrentPosition = (key) => {
-  return POSITION[key];
-};
+const getCurrentPosition = (key) => POSITION[key];
 
 const POSITION = {
   1: [0, 0],
@@ -75,3 +69,6 @@ const POSITION = {
   0: [1, 3],
   "#": [2, 3],
 };
+
+const ASTERISK = "*";
+const SHARP = "#";
