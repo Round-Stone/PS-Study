@@ -1,10 +1,11 @@
 from collections import deque
+import re
 
-def right(deq):
+def isValidBracket(deq):
     stack = []
+    bracket = re.compile('[ \( \{ \[ ]')
     for check in deq:
-        if check == '(' or check == '{' or check == '[':
-            stack.append(check)
+        if bracket.match(check): stack.append(check)
         if stack:
             if check == ')' and stack.pop() != '(':
                 return False
@@ -25,7 +26,7 @@ def solution(s):
     count = 0
     
     for i in range(len(s)):
-        if right(deq):
+        if isValidBracket(deq):
             count += 1
         
         deq.append(deq.popleft())

@@ -1,22 +1,14 @@
 def solution(rows, columns, queries):
     answer = []
-    graph = []
-    num = 1
+    
     #행렬 생성
-    for i in range(rows):
-        temp = []
-        for j in range(columns):
-            temp.append(num)
-            num += 1
-        
-        graph.append(temp)
-        
+    graph = [[i for i in range(1 + (r * columns),columns+1+(r * columns))] for r in range(rows)]
+
     for i in range(len(queries)):
         base_r, base_c = queries[i][0], queries[i][1]
         end_r, end_c = queries[i][2], queries[i][3]
         slave = graph[base_r-1][end_c-1]
         mini = slave
-        
         #상
         for j in range(end_c-1, base_c-1, -1): 
             temp = graph[base_r-1][j-1]
